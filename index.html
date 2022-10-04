@@ -14,7 +14,7 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
       rel="stylesheet"
     />
-    <link href="./assets/css/index.css" rel="stylesheet"/>
+    <link href="./assets/css/index.css" rel="stylesheet" />
   </head>
 
   <body>
@@ -143,17 +143,12 @@
         <!-- Header -->
         <header>
           <h4>Now playing:</h4>
-          <h2>String 57th & 9th</h2>
+          <h2></h2>
         </header>
 
         <!-- CD -->
         <div class="cd">
-          <div
-            class="cd-thumb"
-            style="
-              background-image: url('https://i.ytimg.com/vi/jTLhQf5KJSc/maxresdefault.jpg');
-            "
-          ></div>
+          <div class="cd-thumb" style="background-image: url('https://i.ytimg.com/vi/jTLhQf5KJSc/maxresdefault.jpg')"></div>
         </div>
 
         <!-- Control -->
@@ -190,55 +185,116 @@
       </div>
 
       <!-- Playlist -->
-      <div class="playlist">
-        <div class="song">
-          <div
-            class="thumb"
-            style="
-              background-image: url('https://i.ytimg.com/vi/jTLhQf5KJSc/maxresdefault.jpg');
-            "
-          ></div>
-          <div class="body">
-            <h3 class="title">Music name</h3>
-            <p class="author">Singer</p>
-          </div>
-          <div class="option">
-            <i class="fas fa-ellipsis-h"></i>
-          </div>
-        </div>
-        <div class="song">
-          <div
-            class="thumb"
-            style="
-              background-image: url('https://i.ytimg.com/vi/jTLhQf5KJSc/maxresdefault.jpg');
-            "
-          ></div>
-          <div class="body">
-            <h3 class="title">Music name</h3>
-            <p class="author">Singer</p>
-          </div>
-          <div class="option">
-            <i class="fas fa-ellipsis-h"></i>
-          </div>
-        </div>
-        <div class="song">
-          <div
-            class="thumb"
-            style="
-              background-image: url('https://i.ytimg.com/vi/jTLhQf5KJSc/maxresdefault.jpg');
-            "
-          ></div>
-          <div class="body">
-            <h3 class="title">Music name</h3>
-            <p class="author">Singer</p>
-          </div>
-          <div class="option">
-            <i class="fas fa-ellipsis-h"></i>
-          </div>
-        </div>
-      </div>
+      <div class="playlist"></div>
     </div>
+
+    <script>
+      const $ = document.querySelector.bind(document);
+      const $$ = document.querySelectorAll.bind(document);
+
+      const app = {
+        currentIndex: 0,
+        songs: [
+          {
+            name: "Pink Venom",
+            singer: "BlackPink",
+            path: "./assets/music/PinkVenom-BLACKPINK.mp3",
+            image: "./assets/img/blackpink1.jpg",
+          },
+
+          {
+            name: "How You Like That",
+            singer: "BlackPink",
+            path: "./assets/music/HowYouLikeThat-BLACKPINK.mp3",
+            image: "./assets/img/blackpink2.jpg",
+          },
+
+          {
+            name: "Solo",
+            singer: "Jennie BlackPink",
+            path: "./assets/music/Solo-JennieBlackPink.mp3",
+            image: "./assets/img/jennie.jpg",
+          },
+
+          {
+            name: "On the ground",
+            singer: "Rose BlackPink",
+            path: "./assets/music/OnTheGround-ROSE.mp3",
+            image: "./assets/img/rose.jpg",
+          },
+
+          {
+            name: "Chắc ai đó sẽ về",
+            singer: "Sơn Tùng MTP",
+            path: "./assets/music/ChacAiDoSeVeNewVersion-SonTungMTP.mp3",
+            image: "./assets/img/sontung.jpg",
+          },
+        ],
+        render: function () {
+          const htmls = this.songs.map((song) => {
+            return `
+            <div class="song">
+                <div
+                  class="thumb"
+                  style="
+                    background-image: url('${song.image}');
+                  "
+                ></div>
+
+                <div class="body">
+                  <h3 class="title">${song.name}</h3>
+                  <p class="author">${song.singer}</p>
+                </div>
+
+                <div class="option">
+                  <i class="fas fa-ellipsis-h"></i>
+                </div>
+            </div>`;
+          });
+
+          $(".playlist").innerHTML = htmls.join("");
+        },
+        definedProperties: function () {
+          Object.defineProperty(this, "currentSong", {
+            get: function () {
+              return this.songs[this.currentIndex];
+            },
+          });
+        },
+
+        handleEvent: function () {
+          const cd = $(".cd");
+          const cdWidth = cd.offsetWidth;
+
+          document.onscroll = function () {
+            const crollTop =
+              window.scrollY || document.documentElement.crollTop;
+            const newCDWidth = cdWidth - crollTop;
+
+            cd.style.width = newCDWidth + "px";
+          };
+        },
+
+        loadCurrentSong: function (){
+          const heading = $('header h2');
+          const thumb = $('.cd-thumb');
+          const audio = $('#audio');
+
+          heading.textContent = this.currentSong.name;
+          thumb.style.backgroundImage = `url('${this.currentSong.image}')`
+          audio.src = this.currentSong.path;
+          console.log(heading, thumb, audio)
+        },
+
+        start: function () {
+          this.definedProperties();
+          this.handleEvent();
+          this.loadCurrentSong();
+          this.render();
+        },
+      };
+
+      app.start();
+    </script>
   </body>
 </html>
-
-<!-- Design from: https://static.collectui.com/shots/3671744/musicloud-revolutionary-app-for-music-streaming-large -->
